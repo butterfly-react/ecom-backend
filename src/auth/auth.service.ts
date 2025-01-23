@@ -4,12 +4,16 @@ import * as bcrypt from 'bcrypt'
 import { User } from '@prisma/client';
 import { ConfigService } from '@nestjs/config';
 import ms from 'ms';
+import { TokenPayload } from './token-payload.interface';
+import { JwtService } from '@nestjs/jwt';
+import { Response } from 'express';
 
 @Injectable()
 export class AuthService {
 
     constructor(private readonly usersService: UsersService,
         private readonly configService: ConfigService,
+        private readonly jwtService: JwtService
     ){}
 
 
@@ -17,10 +21,25 @@ export class AuthService {
 
         const expires = new Date()
 
-        const jwtExpiration = this.configService.get<string>('JWT_EXPIRATION') as Parameters<typeof ms>[0];
+        const jwtExpiration = this.configService.getOrThrow<string>('JWT_EXPIRATION') as Parameters<typeof ms>[0];
         expires.setTime(expires.getTime() + ms(jwtExpiration))
 
         
+        const tokenPayload: TokenPayload = {
+            userId: user.id.toString()
+        }
+
+        const token = this.jwtService.sign(tokenPayload)
+
+        response.cookie('Authentication', token, {
+            secure: true,
+            httpOnly: true,
+            expires
+        
+
+        })
+
+        return { tokenPayload }
 
     }
 

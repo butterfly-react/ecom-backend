@@ -3,6 +3,7 @@ import { LocalAuthGuard } from './guards/local-auth.guard';
 import { User } from '@prisma/client';
 import { CurrentUser } from './current-user.decorator';
 import { AuthService } from './auth.service';
+import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
