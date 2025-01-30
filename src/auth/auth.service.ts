@@ -16,31 +16,19 @@ export class AuthService {
         private readonly jwtService: JwtService
     ){}
 
-
-    async login(user: User, response: Response){
-
-        const expires = new Date()
-
-        const jwtExpiration = this.configService.getOrThrow<string>('JWT_EXPIRATION') as Parameters<typeof ms>[0];
-        expires.setTime(expires.getTime() + ms(jwtExpiration))
-
-        
+    async login(user: User, response: Response) {
         const tokenPayload: TokenPayload = {
-            userId: user.id.toString()
-        }
-
-        const token = this.jwtService.sign(tokenPayload)
-
-        response.cookie('Authentication', token, {
-            secure: true,
-            httpOnly: true,
-            expires
+          userId: String(user.id)
+        };
+        const token: string = this.jwtService.sign(tokenPayload);
         
-
-        })
-
-        return { tokenPayload }
-
+        response.cookie('Authentication', token, {
+          secure: true,
+          httpOnly: true,
+          maxAge: 24 * 60 * 60 * 1000, // 24 hours
+        });
+    
+        return { tokenPayload };
     }
 
     async verifyUser(email: string, password: string){

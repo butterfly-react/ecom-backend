@@ -19,7 +19,7 @@ async function bootstrap() {
   });
 
   // Alkalmazás indítása
-  const port = app.get(ConfigService).get('PORT') || 3000;
+  const port = app.get(ConfigService).get('PORT') || 3001;
   await app.listen(port);
 
   console.log(`Application is running on: http://localhost:${port}`);
