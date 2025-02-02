@@ -31,4 +31,5 @@ model Product {
   description String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  sold Boolean @default(false)
 }

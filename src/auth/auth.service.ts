@@ -48,4 +48,18 @@ export class AuthService {
         }
 
     }
+
+    verifyToken(jwt: string){
+
+        console.log(jwt, "jwt")
+        try{
+            this.jwtService.verify(jwt)
+      
+        }catch(err){
+            throw new UnauthorizedException()
+        }
+
+        
+
+    }
 }
