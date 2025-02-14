@@ -1,0 +1,5 @@
+branch-defaults:
+  main:
+    environment: Ecom-backend-env
+global:
+  profile: eb-cli
